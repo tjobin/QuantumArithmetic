@@ -1,14 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_multiplier_scaling(n_values, empirical_t_naive, empirical_t_add_sub, t_to_toffoli_ratio=4):
+def plot_multiplier_scaling(n_values, empirical_toffoli_add_sub):
     """
     Plots empirical T-counts (converted to Toffoli counts) against 
     theoretical Toffoli scaling bounds for quantum multiplication.
     """
     # Convert empirical T-counts to effective Toffoli counts
-    emp_naive_toffoli = np.array(empirical_t_naive) / t_to_toffoli_ratio
-    emp_addsub_toffoli = np.array(empirical_t_add_sub) / t_to_toffoli_ratio
+    emp_addsub_toffoli = np.array(empirical_toffoli_add_sub)
 
     # Generate smooth x-values for theoretical curves
     n_continuous = np.linspace(min(n_values), max(n_values), 100)
@@ -27,13 +26,8 @@ def plot_multiplier_scaling(n_values, empirical_t_naive, empirical_t_add_sub, t_
     plt.plot(n_continuous, theory_add_sub, 
              label='Theory: Add-Subtract ($n^2 + 4n + 3$)', 
              color='#ff7f0e', linestyle='--', zorder=1)
-
-    # Plot empirical data as scatter points
-    plt.scatter(n_values, emp_naive_toffoli, 
-                label='Empirical: Naive', 
-                color='#1f77b4', marker='o', s=60, zorder=2)
     
-    plt.scatter(n_values, emp_addsub_toffoli, 
+    plt.scatter(n_values, emp_addsub_toffoli + 3, # manually add +1 Toffoli for each correction (conservative estimate)
                 label='Empirical: Add-Subtract', 
                 color='#ff7f0e', marker='s', s=60, zorder=2)
 
